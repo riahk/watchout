@@ -1,10 +1,13 @@
 var height = 600;
 var width = 900;
+var collision = 0;
+var score = 0;
+var highScore = 0;
 
 var drag = d3.behavior.drag()
              .on('dragstart', function() {})
-             .on('drag', function(){ player.attr('cx', d3.event.x)
-                                           .attr('cy', d3.event.y)})
+             .on('drag', function(){ player.attr('cx', d3.event.x+"px")
+                                           .attr('cy', d3.event.y+"px")})
              .on('dragend', function(){});
 
 var playSpace = d3.select('.wrapper').style({"width": width+"px"}).append('svg')
@@ -53,8 +56,8 @@ var getData = function(){
 
 
   enemies.each(function(){
-    var cy = this.getAttributes('cy');
-    var cx = this.getAttributes('cx');
+    var cy = this.getAttribute('cy');
+    var cx = this.getAttribute('cx');
     cx = +cx.slice(0, cx.length-2);
     cy = +cy.slice(0, cy.length-2);
     checkDistance(playerCX, playerCY, cx, cy);
@@ -67,8 +70,25 @@ var checkDistance = function(pcx, pcy, enx, eny){
   var distance = Math.sqrt((pcx-enx)*(pcx-enx) + (pcy-eny)*(pcy-eny));
   if (n > distance) {
     console.log("Collision!")
+    collision++
+    d3.select('.collisions').select('span').text(collision)
+    if (score > highScore) {
+      highScore = score;
+    }
+    score = 0;
+    d3.select('.high').select('span').text(highScore)
   }
 };
+
+
+//setInterval(getData, 125);
+
+setInterval(function(){
+  getData ()
+  d3.select(".current").select('span').text(score)
+  score++}, 100)
+
+
 
 
 

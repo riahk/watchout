@@ -42,6 +42,34 @@ var enemy = playSpace.selectAll('.enemy').data(getCoordinates()).enter().append(
   setInterval(function(){playSpace.selectAll('.enemy').data(getCoordinates()).transition().duration(2000).attr("cy", function(d) { return d[1]+"px"})
           .attr("cx", function(d) { return d[0]+"px"})}, 2000)
 
+var getData = function(){
+  var enemies = d3.selectAll('.enemy');
+
+  var playerCX = d3.selectAll('.player').attr("cx");
+      playerCX = +d3.selectAll('.player').attr("cx").slice(0, playerCX.length -2);
+  var playerCY = d3.selectAll('.player').attr("cy");
+      playerCY = +d3.selectAll('.player').attr("cy").slice(0, playerCY.length-2);
+
+
+
+  enemies.each(function(){
+    var cy = this.getAttributes('cy');
+    var cx = this.getAttributes('cx');
+    cx = +cx.slice(0, cx.length-2);
+    cy = +cy.slice(0, cy.length-2);
+    checkDistance(playerCX, playerCY, cx, cy);
+  });
+
+};
+
+var checkDistance = function(pcx, pcy, enx, eny){
+  var n = 25
+  var distance = Math.sqrt((pcx-enx)*(pcx-enx) + (pcy-eny)*(pcy-eny));
+  if (n > distance) {
+    console.log("Collision!")
+  }
+};
+
 
 
 

@@ -38,12 +38,13 @@ var getCoordinates = function(){
 
 };
 
-var enemy = playSpace.selectAll('.enemy').data(getCoordinates()).enter().append("circle").attr("class", "enemy").attr("cy", function(d) { return d[1]+"px"})
-          .attr("cx", function(d) { return d[0]+"px"}).attr('r', "10px").attr("fill", "aqua")
+var enemy = playSpace.selectAll('.enemy').data(getCoordinates()).enter().append("image").attr("class", "enemy spin").attr("y", function(d) { return d[1]+"px"})
+          .attr("x", function(d) { return d[0]+"px"}).attr('height', "20px").attr("width", "20px").attr("xlink:href", "http://pixabay.com/static/uploads/photo/2013/07/12/18/46/throwing-star-153835_640.png")
 
 
-  setInterval(function(){playSpace.selectAll('.enemy').data(getCoordinates()).transition().duration(2000).attr("cy", function(d) { return d[1]+"px"})
-          .attr("cx", function(d) { return d[0]+"px"})}, 2000)
+
+  setInterval(function(){playSpace.selectAll('.enemy').data(getCoordinates()).transition().duration(2000).attr("y", function(d) { return d[1]+"px"})
+          .attr("x", function(d) { return d[0]+"px"})}, 2000)
 
 var getData = function(){
   var enemies = d3.selectAll('.enemy');
@@ -56,11 +57,11 @@ var getData = function(){
 
 
   enemies.each(function(){
-    var cy = this.getAttribute('cy');
-    var cx = this.getAttribute('cx');
+    var cy = this.getAttribute('y');
+    var cx = this.getAttribute('x');
     cx = +cx.slice(0, cx.length-2);
     cy = +cy.slice(0, cy.length-2);
-    checkDistance(playerCX, playerCY, cx, cy);
+    checkDistance(playerCX, playerCY, cx+10, cy+10);
   });
 
 };

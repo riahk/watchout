@@ -7,44 +7,48 @@ var highScore = 0;
 var drag = d3.behavior.drag()
              .on('dragstart', function() {})
              .on('drag', function(){ player.attr('cx', d3.event.x+"px")
-                                           .attr('cy', d3.event.y+"px")})
+             .attr('cy', d3.event.y+"px")})
              .on('dragend', function(){});
 
 var playSpace = d3.select('.wrapper').style({"width": width+"px"}).append('svg')
-  .style({"height": height+"px", "width": width+"px", "background-image":"url(http://www.hdwallpaperscool.com/wp-content/uploads/2013/12/space-galaxy-high-definition-wallpapers-cool-desktop-widescreen-backgrounds.jpg)", "background-size": "cover"})
+  .style({"height": height+"px", "width": width+"px",
+  "background-image":"url(http://www.hdwallpaperscool.com/wp-content/uploads/2013/12/space-galaxy-high-definition-wallpapers-cool-desktop-widescreen-backgrounds.jpg)",
+  "background-size": "cover"})
 
 
-var player = playSpace.selectAll('.player').data([1]).enter().append('circle').attr('class', 'player')
-            .attr('cx', width/2+"px").attr('cy', height/2+"px").attr('r', "15px").call(drag);
+var player = playSpace.selectAll('.player').data([1])
+            .enter().append('circle').attr('class', 'player')
+            .attr('cx', width/2+"px").attr('cy', height/2+"px")
+            .attr('r', "15px").call(drag);
 
 var getCoordinates = function(){
 
   var data = [];
+
   for (var i = 0; i < 20; i++) {
+    var tuple = []
 
-  var tuple = []
+    var x = Math.random()*width -10
+    var y = Math.random()*height -10
 
-  var x = Math.random()*width -10
-  var y = Math.random()*height -10
+    tuple.push(x);
+    tuple.push(y);
 
-  tuple.push(x);
-  tuple.push(y);
-
-  data.push(tuple);
+    data.push(tuple);
   }
 
   return data;
-
-
 };
 
-var enemy = playSpace.selectAll('.enemy').data(getCoordinates()).enter().append("image").attr("class", "enemy spin").attr("y", function(d) { return d[1]+"px"})
-          .attr("x", function(d) { return d[0]+"px"}).attr('height', "20px").attr("width", "20px").attr("xlink:href", "http://pixabay.com/static/uploads/photo/2013/07/12/18/46/throwing-star-153835_640.png")
+var enemy = playSpace.selectAll('.enemy').data(getCoordinates())
+          .enter().append("image").attr("class", "enemy spin")
+          .attr("y", function(d) { return d[1]+"px"})
+          .attr("x", function(d) { return d[0]+"px"})
+          .attr('height', "20px").attr("width", "20px")
+          .attr("xlink:href", "http://pixabay.com/static/uploads/photo/2013/07/12/18/46/throwing-star-153835_640.png")
 
 
 
-  setInterval(function(){playSpace.selectAll('.enemy').data(getCoordinates()).transition().duration(2000).attr("y", function(d) { return d[1]+"px"})
-          .attr("x", function(d) { return d[0]+"px"})}, 2000)
 
 var getData = function(){
   var enemies = d3.selectAll('.enemy');
@@ -82,12 +86,15 @@ var checkDistance = function(pcx, pcy, enx, eny){
 };
 
 
-//setInterval(getData, 125);
+setInterval(function(){
+          playSpace.selectAll('.enemy').data(getCoordinates())
+          .transition().duration(2000).attr("y", function(d) { return d[1]+"px"})
+          .attr("x", function(d) { return d[0]+"px"})}, 2000)
 
 setInterval(function(){
-  getData ()
-  d3.select(".current").select('span').text(score)
-  score++}, 100)
+          getData ()
+          d3.select(".current").select('span').text(score)
+          score++}, 100)
 
 
 
